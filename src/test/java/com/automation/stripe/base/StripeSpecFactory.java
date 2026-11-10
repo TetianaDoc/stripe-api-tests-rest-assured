@@ -1,3 +1,5 @@
+package com.automation.stripe.base;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -8,7 +10,7 @@ public class StripeSpecFactory {
     static final String STRIPE_SECRET_KEY = System.getenv("STRIPE_SECRET_KEY");
 
     //Request configuration
-    static RequestSpecification getBaseRequestSpec() {
+    public static RequestSpecification getBaseRequestSpec() {
         return new RequestSpecBuilder()
                 .setBaseUri("https://api.stripe.com/v1")
                 .setAuth(io.restassured.RestAssured.oauth2(STRIPE_SECRET_KEY))
@@ -18,7 +20,7 @@ public class StripeSpecFactory {
     }
 
     //Response configuration
-    static ResponseSpecification getSuccessResponseSpec() {
+    public static ResponseSpecification getSuccessResponseSpec() {
         return new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .log(LogDetail.BODY)
