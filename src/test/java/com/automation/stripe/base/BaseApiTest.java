@@ -1,12 +1,14 @@
+package com.automation.stripe.base;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class BaseApiTest {
     // Protected - child classes can read and write to it
-    protected String customerId;
+    public String customerId;
 
     // A reusable cleanup method, NOT annotated with @AfterEach so child classes can control it
-    protected void deleteTestCustomer() {
+    public void deleteTestCustomer() {
         if (customerId != null) {
             given()
                     .spec(StripeSpecFactory.getBaseRequestSpec())
