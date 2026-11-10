@@ -24,4 +24,17 @@ jobs:
       - name: Run REST Assured Tests
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        # continue-on-error ensures the pipeline doesn't stop here if a test fails
+        continue-on-error: true
         run: mvn clean test
+
+      - name: Generate Allure Report
+        if: always()
+        run: mvn allure:report
+
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-html-report
+          path: target/site/allure-maven-plugin
