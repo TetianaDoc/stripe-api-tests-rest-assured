@@ -8,10 +8,11 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.TestInstance;
-//Test suite simulates a scenario where create a user,
+//Test suite simulates a scenario with a flow, where create a user,
 // modify their data,
 // retrieve it to verify,
 // and clean up by deleting it.
+//It is for demonstrating @Order and @TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

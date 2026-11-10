@@ -20,6 +20,20 @@ public class BaseApiTest {
                 .extract().path("id");
     }
 
+    // Overloaded centralized setup customer method for idempotency testing
+    protected void setupTestCustomer(String name, String email, String idempotencyKey){
+        customerId=given()
+                .spec(StripeSpecFactory.getBaseRequestSpec())
+                .header("Idempotency-Key", idempotencyKey)
+                .formParam("name", name)
+                .formParam("email", email)
+                .when()
+                .post("/customers")
+                .then()
+                .spec(StripeSpecFactory.getSuccessResponseSpec())
+                .extract().path("id");
+    }
+
     // Existing Centralized Teardown Method
     protected void deleteTestCustomer() {
         if (customerId != null) {

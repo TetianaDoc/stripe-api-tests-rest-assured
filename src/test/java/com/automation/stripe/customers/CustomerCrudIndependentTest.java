@@ -10,20 +10,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 class CustomerCrudIndependentTest extends BaseApiTest {
-    //1. Setup helper - Arrange: creates a fresh customer just for the current test
-    private void setupTestCustomer(String name, String email) {
-        customerId = given()
-                .spec(StripeSpecFactory.getBaseRequestSpec())
-                .formParam("name", name)
-                .formParam("email", email)
-                .when()
-                .post("/customers")
-                .then()
-                .spec(StripeSpecFactory.getSuccessResponseSpec())
-                .extract().path("id");
-    }
 
-    //2. Teardown - runs after each test to clean up
+    //Teardown - runs after each test to clean up
     @AfterEach
     void tearDown() {
         deleteTestCustomer(); // Calls the inherited method from BaseApiTest
@@ -31,7 +19,7 @@ class CustomerCrudIndependentTest extends BaseApiTest {
 
     @Test
     void createCustomer_ShouldReturnValidId() {
-        // Act & Assert (Setup (Arrange) is handled directly by the action being tested)
+        // Act & Assert
         customerId = given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
                 .formParam("name", "Created independent user")
