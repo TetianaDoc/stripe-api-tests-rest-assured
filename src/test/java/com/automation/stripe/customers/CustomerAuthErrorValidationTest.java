@@ -10,8 +10,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 import org.junit.jupiter.api.TestInstance;
 
-//Test suite simulates a scenario where create a user,
-//and trying to retrive a user with invalid auth.
+//Test simulates a scenario where trying to retrieve a user with invalid auth.
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
