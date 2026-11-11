@@ -3,7 +3,7 @@
 [![Java 17](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![REST Assured](https://img.shields.io/badge/REST%20Assured-5.4.0-brightgreen.svg)](https://rest-assured.io/)
 [![JUnit 5](https://img.shields.io/badge/JUnit-5.10.2-blue.svg)](https://junit.org/junit5/)
-[![Allure Report](https://img.shields.io/badge/Allure-2.25.0-blueviolet.svg)](https://qameta.io/allure-report/)
+[![Allure Report](https://img.shields.io/badge/Allure%20Report-Live%20on%20GitHub%20Pages-brightgreen.svg)](https://tetianadoc.github.io/stripe-api-tests-rest-assured/)
 [![Build Status](https://img.shields.io/badge/CI-GitHub%20Actions-blue.svg)](.github/workflows/maven.yml)
 
 An enterprise-grade, scalable API test automation framework built for verifying [Stripe's REST API](https://stripe.com/docs/api) (`/v1/customers` and `/v1/products`). 
@@ -200,6 +200,13 @@ To automatically launch the report in your default web browser:
 ```bash
 mvn allure:serve
 ```
+
+### 3. View Live Report on GitHub (GitHub Pages)
+Every commit to the `main` branch automatically generates and publishes the interactive Allure report to GitHub Pages:
+
+👉 **[https://tetianadoc.github.io/stripe-api-tests-rest-assured/](https://tetianadoc.github.io/stripe-api-tests-rest-assured/)**
+
+No local setup or download needed — view full interactive charts, test suites, timelines, and behaviors directly in your browser.
 
 ---
 
