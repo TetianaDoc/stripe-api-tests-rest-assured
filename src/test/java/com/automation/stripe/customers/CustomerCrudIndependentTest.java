@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 
 class CustomerCrudIndependentTest extends BaseApiTest {
 
@@ -23,51 +23,54 @@ class CustomerCrudIndependentTest extends BaseApiTest {
         customerId = given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
                 .formParam("name", "Created independent user")
-                .formParam("email", "indep@leovegas.com")
+                .formParam("email", "indep@example.com")
                 .when()
                 .post("/customers")
                 .then()
                 .spec(StripeSpecFactory.getSuccessResponseSpec())
-                .body("id", notNullValue())
+                .body("id", startsWith("cus_"))
                 .extract().path("id");
     }
 
     @Test
-    void createCustomer_ShouldReturnValidData() {
+    void retrieveCustomer_ShouldReturnValidData() {
         //Arrange
-        setupTestCustomer("independent retrieve user", "indretruser@leovegas.com");
+        setupTestCustomer("independent retrieve user", "indretruser@example.com");
         //Act and Assert
         given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
+                .pathParam("id", customerId)
                 .when()
-                .get("/customers/" + customerId)
+                .get("/customers/{id}")
                 .then()
                 .spec(StripeSpecFactory.getSuccessResponseSpec())
-                .body("email", equalTo("indretruser@leovegas.com"));
+                .body("email", equalTo("indretruser@example.com"));
     }
 
     @Test
-    void updateCustomer_ShouldMofifyData() {
-        setupTestCustomer("old name", "oldemail@leovegas.com");
+    void updateCustomer_ShouldModifyData() {
+        setupTestCustomer("old name", "oldemail@example.com");
         given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
+                .pathParam("id", customerId)
                 .formParam("name", "updated name")
-                .formParam("email", "updemail@leovegas.com")
+                .formParam("email", "updemail@example.com")
                 .when()
-                .post("/customers/" + customerId)
+                .post("/customers/{id}")
                 .then()
                 .spec(StripeSpecFactory.getSuccessResponseSpec())
                 .body("name", equalTo("updated name"))
-                .body("email", equalTo("updemail@leovegas.com"));
+                .body("email", equalTo("updemail@example.com"));
     }
 
     @Test
     void deleteCustomer_ShouldReturnTrue() {
-        setupTestCustomer("to be deleted", "delete@leovegas.com");
+        setupTestCustomer("to be deleted", "delete@example.com");
         given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
+                .pathParam("id", customerId)
                 .when()
-                .delete("/customers/" + customerId)
+                .delete("/customers/{id}")
                 .then()
                 .spec(StripeSpecFactory.getSuccessResponseSpec())
                 .body("deleted", equalTo(true));

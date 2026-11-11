@@ -1,15 +1,27 @@
 package com.automation.stripe.customers;
 
-import static io.restassured.RestAssured.when;
-import static org.hamcrest.Matchers.*;
-
 import com.automation.stripe.base.BaseApiTest;
 import com.automation.stripe.base.StripeSpecFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.nullValue;
 
 class CustomerEdgeCasesTest extends BaseApiTest {
+
+    @AfterEach
+    void tearDown() {
+        deleteTestCustomer();
+    }
 
     @Test
     void retrieveCustomerWithInvalidId_ShouldReturn404() {
@@ -22,7 +34,6 @@ class CustomerEdgeCasesTest extends BaseApiTest {
                 .statusCode(404)
                 .body("error.type", equalTo("invalid_request_error"))
                 .body("error.message", containsString("No such customer"));
-
     }
 
     @Test
@@ -43,9 +54,9 @@ class CustomerEdgeCasesTest extends BaseApiTest {
 
     @Test
     void createCustomerWithEmptyEmail_ShouldReturn200() {
-        // Tests API validation rules. Stripe allows empty emails,
-        // but we want to assert the field is explicitly saved as an empty string.
-        given()
+        // Tests API validation rules: Stripe treats an empty email string as clearing
+        // or omitting the email parameter, storing it as null rather than an empty string.
+        customerId = given()
                 .spec(StripeSpecFactory.getBaseRequestSpec())
                 .formParam("name", "no email user Bob")
                 .formParam("email", "")
@@ -55,9 +66,6 @@ class CustomerEdgeCasesTest extends BaseApiTest {
                 .spec(StripeSpecFactory.getSuccessResponseSpec())
                 .body("email", nullValue())
                 .extract().path("id");
-
-        //clean up the customer after test
-        deleteTestCustomer();
     }
 
     //To count more than 100 customers, it must implement cursor-based pagination using a while loop
@@ -65,12 +73,14 @@ class CustomerEdgeCasesTest extends BaseApiTest {
     // in the current page as the starting_after parameter for the next page.
     @Test
     void calculateTotalNumberOfCreatedCustomersWithPagination() {
-
         boolean hasMore = true;
         String lastObjectId = null;
         int totalCustomers = 0;
+        int pageCount = 0;
+        final int maxPages = 20;
 
-        while (hasMore) {
+        while (hasMore && pageCount < maxPages) {
+            pageCount++;
             //1. prepare request with the limit 100
             var request = given()
                     .spec(StripeSpecFactory.getBaseRequestSpec())
@@ -89,12 +99,12 @@ class CustomerEdgeCasesTest extends BaseApiTest {
                     .extract();
 
             //4. Extract the IDs from the current page to count them
-            java.util.List<String> customerIds = response.path("data.id");
+            List<String> customerIds = response.path("data.id");
             int currentPageSize = customerIds.size();
             totalCustomers += currentPageSize;
 
             // 5. Check if Stripe has more data
-            hasMore = response.path("has_more");
+            hasMore = Boolean.TRUE.equals(response.path("has_more"));
 
             // 6. Update the cursor to the very last ID in the current page
             if (hasMore && currentPageSize > 0) {
@@ -102,7 +112,6 @@ class CustomerEdgeCasesTest extends BaseApiTest {
             }
         }
 
-        System.out.println("Total customers across all pages: " + totalCustomers);
-        org.junit.jupiter.api.Assertions.assertTrue(totalCustomers >= 0);
+        assertThat(totalCustomers, greaterThan(0));
     }
 }
