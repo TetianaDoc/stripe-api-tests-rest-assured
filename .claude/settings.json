@@ -1,0 +1,10 @@
+{
+  "allowedTools": [
+    "Bash(mvn test-compile*)",
+    "Bash(mvn test*)",
+    "Bash(git status*)",
+    "Bash(git diff*)",
+    "Bash(rm -rf .claude/.review-cache*)",
+    "Bash(mkdir -p .claude/.review-cache*)"
+  ]
+}

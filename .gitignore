@@ -1,2 +1,6 @@
 .idea
 target
+.claude/.review-cache/
+.agents/.review-cache/
+.env
+*.local.properties
