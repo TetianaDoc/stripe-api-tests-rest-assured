@@ -4,3 +4,4 @@ target
 .agents/.review-cache/
 .env
 *.local.properties
+.allure/
