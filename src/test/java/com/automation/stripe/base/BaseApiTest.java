@@ -52,12 +52,12 @@ public class BaseApiTest {
         if (customerId != null) {
             given()
                     .spec(StripeSpecFactory.getBaseRequestSpec())
+                    .pathParam("id", customerId)
                     .when()
-                    .delete("/customers/" + customerId)
+                    .delete("/customers/{id}")
                     .then()
                     .spec(StripeSpecFactory.getSuccessResponseSpec())
                     .body("deleted", equalTo(true));
-            System.out.println("Base Class Cleanup: Deleted customer " + customerId);
             customerId = null; // Reset to prevent double-deletion
         }
     }
@@ -67,8 +67,9 @@ public class BaseApiTest {
         if (productId != null) {
             given()
                     .spec(StripeSpecFactory.getBaseRequestSpec())
+                    .pathParam("id", productId)
                     .when()
-                    .delete("/products/" + productId)
+                    .delete("/products/{id}")
                     .then()
                     .spec(StripeSpecFactory.getSuccessResponseSpec())
                     .body("deleted", equalTo(true));
