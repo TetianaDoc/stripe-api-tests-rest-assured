@@ -4,6 +4,10 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
+ /*
+ * This class serves as an in-process simulation layer for standalone test suite execution without requiring
+ * an external microservice runtime.
+ */
 public class ResilientStripeClient {
     private int consecutiveFailures = 0;
     private boolean circuitOpen = false;
