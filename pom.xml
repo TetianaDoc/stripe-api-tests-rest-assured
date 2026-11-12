@@ -86,5 +86,19 @@
             <version>2.25.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- WireMock for API mocking and stubs -->
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>3.3.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.4.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
